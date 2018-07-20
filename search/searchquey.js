@@ -1,17 +1,20 @@
 'use strict'
-/* *******
-Dependencies
-* *******/
+/* ******* Dependencies * *******/
 //Lib for algolia
-const algoliasearch = require('algoliasearch');
+const algoliasearch = require('algoliasearch')
+//Const to join paths
+const path = require('path');
+//Lib for manage env
+const dotenv = require('dotenv').config({path: `${path.join(__dirname,'./../config/.env')}`})
 
-/* *******
-Initialize
-* *******/
+
+/* ******* Initialize * *******/
 //load env file
-dotenv.load();
+// dotenv.config()
+let x = process.env.ALGOLIA_APP_ID
 //load algolia
-const client = algoliasearch(process.env.ALGOLIA_APP_ID, process.env.ALGOLIA_API_KEY);
+const client = algoliasearch(process.env.ALGOLIA_APP_ID, process.env.ALGOLIA_API_KEY)    
+
 //*************************************** Biz Logic *********************************/
 //************************************************************************************
 
@@ -38,7 +41,7 @@ function SearchbyWord(wordToSearch, indexName){
 }
 
 //>>> Search by property
-function SearchbyProperty(wordToSearch, propertyValue, propertyName, indexName){
+function SearchbyProperty(wordToSearch, propertyName, propertyValue, indexName){
     return new Promise((resolve, reject)=>{
         try {
             if(!indexName){
@@ -60,7 +63,7 @@ function SearchbyProperty(wordToSearch, propertyValue, propertyName, indexName){
                 hitsPerPage: 100
             }
             //client.setExtraHeader('X-Algolia-User-ID', 'user123');
-            algoliaindex.search(`${wordToSearch}`).then(response =>{
+            algoliaindex.search(`${parameters}`).then(results =>{
                 console.log('We got `' + results.nbHits + '` results')
                 console.log('Here is the first one: ', results.hits[0])
                 resolve()
@@ -73,4 +76,10 @@ function SearchbyProperty(wordToSearch, propertyValue, propertyName, indexName){
             reject();
         }
     })
+}
+
+//export methods
+module.exports ={
+    SearchbyWord,
+    SearchbyProperty
 }
