@@ -63,14 +63,43 @@ function SearchbyProperty(wordToSearch, propertyName, propertyValue, indexName){
                 hitsPerPage: 100
             }
             //client.setExtraHeader('X-Algolia-User-ID', 'user123');
-            algoliaindex.search(`${parameters}`).then(results =>{
-                console.log('We got `' + results.nbHits + '` results')
-                console.log('Here is the first one: ', results.hits[0])
+            // algoliaindex.search("", {
+            //     "facets": "[\"post.location.city\"]",
+            //     "facetFilters": "[[\"post.location.city:cali\"]]"
+            // })
+            //FIlters by Category
+            algoliaindex.search({
+              query: '',
+              attributesToRetrieve: ['userFrom'],
+              facets: ['post.location.city'],
+              facetFilters: ['post.location.city:cali'],
+              facetingAfterDistinct: true
+            }).then(res => {
+                console.log('We got `' + res.nbHits + '` results')
+                console.log('Here is the first one: ', res.hits[0])
                 resolve()
-            }).catch(err =>{
-                console.log(`Error: ${err}`)
-                reject();
+              //console.log(res);
             });
+
+            // algoliaindex.searchForFacetValues({
+            //     facetName: `${propertyName}`,
+            //     facetQuery: `${propertyValue}`
+            //   }).then(Response =>{
+            //     console.log('We got `' + results.nbHits + '` results')
+            //     console.log('Here is the first one: ', results.hits[0])
+            //     resolve()
+            // }).catch(err =>{
+            //     console.log(`Error: ${err}`)
+            //     reject();
+            // });
+            // algoliaindex.search(`${parameters}`).then(results =>{
+                // console.log('We got `' + results.nbHits + '` results')
+                // console.log('Here is the first one: ', results.hits[0])
+                // resolve()
+            // }).catch(err =>{
+            //     console.log(`Error: ${err}`)
+            //     reject();
+            // });
         } catch (error) {
             console.log(`Error general en el método SearchbyProperty: ${error}`)
             reject();
