@@ -71,8 +71,8 @@ function SearchbyProperty(wordToSearch, propertyName, propertyValue, indexName){
             algoliaindex.search({
               query: '',
               attributesToRetrieve: ['userFrom'],
-              facets: ['post.location.city'],
-              facetFilters: ['post.location.city:cali'],
+              facets: ['post.location.name'],
+              facetFilters: ['post.location.name:Local by Rausch'],
               facetingAfterDistinct: true
             }).then(res => {
                 console.log('We got `' + res.nbHits + '` results')
